@@ -1,10 +1,10 @@
 
 dashboardPage(
-  dashboardHeader(title = "Fortune 500"),
+  dashboardHeader(title = "Fortune 1000 HQs"),
   
     dashboardSidebar(sidebarMenu(
     menuItem("HQs", tabName = "locations"),
-    menuItem("StateBins", tabName = "statebins"),
+  #  menuItem("StateBins", tabName = "statebins"),
     menuItem("ChoroPleth", tabName = "choropleth")
     )
     ),
@@ -14,29 +14,40 @@ dashboardPage(
       tabItem("locations",
     fluidRow(
     box(
-      width = 8, status = "success", solidHeader = TRUE,
+      width = 6, status = "success", solidHeader = TRUE,
       title = "City Locations of top  US companies by total Revenue Click markers for details",
       sliderInput("count","",min=1,max=1000,value=c(1,100), ticks=FALSE),
       leafletOutput("locations")
       
+    ),
+    box(
+      width = 6, status = "success", solidHeader = TRUE,
+      title = "Fortune Companies by State. Hover for Info",
+      statebinOutput("statebins")
+      
     )
   )),
-  tabItem("statebins",
-          fluidRow(
-            box(
-              width = 8, status = "success", solidHeader = TRUE,
-              title = "Fortune Companies by State. Hover for Info",
-              statebinOutput("statebins")
-              
-            )
-          )),
+#   tabItem("statebins",
+#           fluidRow(
+#             box(
+#               width = 6, status = "success", solidHeader = TRUE,
+#               title = "Fortune Companies by State. Hover for Info",
+#               statebinOutput("statebins")
+#               
+#             )
+#           )),
   tabItem("choropleth",
           fluidRow(
             box(
               width = 6, status = "success", solidHeader = TRUE,
               title = "Fortune Companies by State. Click for Info and Companies list",
-              leafletOutput("choropleth")
               
+              leafletOutput("choropleth")
+                    ),
+            box(
+              width = 6, status = "success", solidHeader = TRUE,
+              title = "Leading Companies within State",
+              DT::dataTableOutput("table")
               
             )
           ))

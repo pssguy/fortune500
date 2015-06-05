@@ -6,7 +6,7 @@ output$choropleth <- renderLeaflet({
   
   leaflet(data = states2) %>%
     addTiles() %>%
-    #
+   setView(-110,38,zoom=3) %>% 
     addPolygons(fillColor = ~pal(total), 
                 fillOpacity = 0.6, 
                 color = "#BDBDC3", 
@@ -16,4 +16,15 @@ output$choropleth <- renderLeaflet({
     mapOptions(zoomToLimits="first")
   
   
+})
+
+output$table <- DT::renderDataTable({
+  print("enter")
+  stateID <-input$choropleth_shape_click$id
+  
+  fortune %>% 
+    mutate(rank=row_number()) %>% 
+    filter(state==stateID) %>% 
+    select(rank,company,city,industry) %>% 
+    DT::datatable(rownames=FALSE)
 })

@@ -81,7 +81,7 @@ states <-maps[50:100,]
 
 # might come in handy when doing a ranking by state count and ranking 1000-1
 sort(names(states))
-stateId <-str_replace(states$iso_3166_2,"US-","") #inc dc
+states$stateId <-str_replace(states$iso_3166_2,"US-","") #inc dc
 
 
 
@@ -93,10 +93,140 @@ data <-data %>%
   mutate(rank=row_number(),revRank=1001-rank)
 
 data <- data %>% 
-  mutate(revRank=1001-rank)  
+  mutate(revRank=1001-rank)
 
-leaflet(data=data) %>% 
+jitteredData <- data
+
+jitteredData$lon <- jitter(jitteredData$lon,amount=.1)
+jitteredData$lat <- jitter(jitteredData$lat,amount =.1)
+
+leaflet(data=jitteredData) %>% 
   addTiles() %>% 
   clearBounds() %>% 
  # addCircleMarkers(radius= ~diameter/10,popup=~ paste0("Name: ",name,"<br>Diameter: ",diameter,"km"))
 addCircles(radius = ~ revRank/100,popup=~ paste0(rank,": <b>",company,"</b><br>",location,"<br>",industry))
+
+
+data %>% 
+  filter(location=="Las Vegas, NV")
+
+## create choropleth - say number by stats
+## need to split company
+glimpse(data)
+library(tidyr)
+fortune <- read.csv("fortune500.csv")
+col=
+df %>% 
+separate(df,location,c("city","state"))
+
+df <- data.frame(x = c("a.b", "a.d", "b.c"))
+df %>% separate(x, c("A", "B")) # as in vignette
+df %>% separate(x, c("A", "B"),sep="\\.") #this also works
+temp <- fortune %>%  separate(location,c("city","state"))
+glimpse(fortune)
+
+fortune$location <- as.character(fortune$location) # did not help
+fortune %>%  separate(location,c("city","state"),sep="\\,")
+df %>% separate(x, c("city", "state"))
+
+df <- data.frame(x = c("a.b", "a.d", "b.c"))
+temp <-df %>% extract(x, "A")
+df %>% extract(x, c("A", "B"), "([[:alnum:]]+)\\.([[:alnum:]]+)")
+
+library(stringr)
+str_replace(fortune$location,", ",".")
+
+fortune$state <- str_sub(fortune$location,-2)
+fortune$city <- str_sub(fortune$location,1,-5)
+write_csv(fortune,"fortune500.csv")
+
+
+allStates <- data.frame(state=unique(taxdata$state)) #51
+summary<-fortune %>% 
+  group_by(state) %>% 
+  summarize(total=n()) #45 prob should do a joine with a states field
+
+summary <- allStates %>% 
+   left_join(summary)
+
+summary[is.na(summary$total),]$total <- 0
+
+summary <- summary %>% 
+   
+  mutate(rank=min_rank(desc(total)))
+
+
+## statebin
+library(rcstatebin)
+library(dplyr)
+glimpse(taxdata)
+
+td <- taxdata %>% 
+  select(state,share)
+
+glimpse(td)
+
+statebin(data = td,
+         x = "state",
+         y = "share")
+
+glimpse(summary)
+str(summary)
+summary <- data.frame(summary)
+summary$state <- as.factor(summary$state)
+summary$total <- as.numeric(summary$total)
+statebin(data = summary,
+         x = "state",
+         y = "total"
+,
+#facet = "description",
+         heading =  "<b>Where are Fortune 500 HQs?</b>",
+         footer = "<small>Source: Fortune500 <a href='http://fortune.com/fortune500/'>(Data)</a>",
+         colors = RColorBrewer::brewer.pal(5, 'PuRd')#,
+       #  control = 'dropdown'
+)
+
+topIndustries <- data %>% 
+  group_by(industry) %>% 
+  summarize(count=n()) %>% 
+  ungroup() %>% 
+  arrange(desc(count)) %>% 
+  mutate(name=paste0(industry," (",count,")"))
+
+
+statebin(data = taxdata,
+         x = "state",
+         y = "share",
+         facet = "description",
+         heading =  "<b>Where do your state's taxes come from?</b>",
+         footer = "<small>Source: Census <a href='http://www2.census.gov/govs/statetax/14staxcd.txt'>(Data)</a>",
+         colors = RColorBrewer::brewer.pal(5, 'PuRd'),
+         control = 'dropdown'
+)
+
+sort(names(maps))
+states2  <- sp::merge(states, 
+                                summary, 
+                                by.x = "stateId", 
+                                by.y = "state",                    
+                                sort = FALSE)
+states2$popUp <- paste0("<strong>",states2$rank,": ", states2$name, "</strong><br>",
+                        
+                        states2$total," companies")
+                       
+
+sort(names(states2))
+lng1 <- min(states$lng)
+pal <- colorQuantile("Reds", NULL, n = 8)
+#pal <- RColorBrewer::brewer.pal(5, 'PuRd')
+leaflet(data = states2) %>%
+  addTiles() %>%
+ #
+  addPolygons(fillColor = ~pal(total), 
+              fillOpacity = 0.6, 
+              color = "#BDBDC3", 
+              weight = 1, 
+              layerId = states2$stateId,
+              popup = states2$popUp) %>% 
+   mapOptions(zoomToLimits="first")
+

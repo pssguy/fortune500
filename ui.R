@@ -4,7 +4,8 @@ dashboardPage(
   
     dashboardSidebar(sidebarMenu(
     menuItem("HQs", tabName = "locations"),
-    menuItem("StateBins", tabName = "statebins")
+    menuItem("StateBins", tabName = "statebins"),
+    menuItem("ChoroPleth", tabName = "choropleth")
     )
     ),
     
@@ -26,6 +27,16 @@ dashboardPage(
               width = 8, status = "success", solidHeader = TRUE,
               title = "Fortune Companies by State. Hover for Info",
               statebinOutput("statebins")
+              
+            )
+          )),
+  tabItem("choropleth",
+          fluidRow(
+            box(
+              width = 6, status = "success", solidHeader = TRUE,
+              title = "Fortune Companies by State. Click for Info and Companies list",
+              leafletOutput("choropleth")
+              
               
             )
           ))

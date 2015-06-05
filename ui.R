@@ -5,7 +5,12 @@ dashboardPage(
     dashboardSidebar(sidebarMenu(
     menuItem("HQs", tabName = "locations"),
   #  menuItem("StateBins", tabName = "statebins"),
-    menuItem("ChoroPleth", tabName = "choropleth")
+    menuItem("ChoroPleth", tabName = "choropleth"),
+  menuItem("Data", tabName = "data"),
+  menuItem("", icon = icon("twitter-square"),
+           href = "https://twitter.com/pssGuy"),
+  menuItem("", icon = icon("envelope"),
+           href = "mailto:agcur@rogers.com")
     )
     ),
     
@@ -23,6 +28,7 @@ dashboardPage(
     box(
       width = 6, status = "success", solidHeader = TRUE,
       title = "Fortune Companies by State. Hover for Info",
+      radioButtons("style","",choices=c("square","hex"),inline=TRUE),
       statebinOutput("statebins")
       
     )
@@ -50,10 +56,22 @@ dashboardPage(
               DT::dataTableOutput("table")
               
             )
-          ))
+          )),
+tabItem("data",
+          fluidRow(
+            column(width=8,offset=2,
+          
+          box(
+            status = "info", solidHeader = FALSE,
+            includeMarkdown("data.md"),
+            hr(),
+            DT::dataTableOutput("data")
+          )
+            ))
+        ))
 )
 )
-)
+
 
 # header <-  dashboardHeader(title = "Fortune 500")
 # sidebar <-dashboardSidebar(disable = TRUE)

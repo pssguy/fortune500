@@ -7,6 +7,7 @@ dashboardPage(
   #  menuItem("StateBins", tabName = "statebins"),
     menuItem("ChoroPleth", tabName = "choropleth"),
   menuItem("Data", tabName = "data"),
+  menuItem("Info", tabName = "info"),
   menuItem("", icon = icon("twitter-square"),
            href = "https://twitter.com/pssGuy"),
   menuItem("", icon = icon("envelope"),
@@ -68,25 +69,14 @@ tabItem("data",
             DT::dataTableOutput("data")
           )
             ))
-        ))
+        ),
+
+tabItem("info",includeMarkdown("info.md")) 
 )
-)
+       
+        
+))
 
 
-# header <-  dashboardHeader(title = "Fortune 500")
-# sidebar <-dashboardSidebar(disable = TRUE)
-# body <- dashboardBody(fluidRow(
-#   box(
-#     width = 8, status = "success", solidHeader = TRUE,
-#     title = "Locations",
-#     leafletOutput("locations")
-#     
-#   )
-# ))
-#  
-# 
-# dashboardPage(skin='green',
-#               header,
-#               sidebar,
-#               body
-# )
+
+

@@ -2,7 +2,7 @@
 
 output$choropleth <- renderLeaflet({
   
-  
+  if(is.null(input$industry)) return()
   
   states2  <- sp::merge(states, 
                         theData()$summary, 

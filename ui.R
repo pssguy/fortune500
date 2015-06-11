@@ -3,14 +3,14 @@ dashboardPage(
   dashboardHeader(title = "Fortune 1000 HQs"),
   
     dashboardSidebar(
-      sliderInput("count","",min=1,max=1000,value=c(1,101),step=10, ticks=FALSE),
+      sliderInput("count","",min=1,max=1000,value=c(1,1000),step=10, ticks=FALSE),
       uiOutput("industries"),
  
   sidebarMenu(
-    menuItem("Maps", tabName = "maps"),
+    menuItem("Maps", tabName = "maps",icon = icon("map-marker")),
  
-  menuItem("Data", tabName = "data"),
-  menuItem("Info", tabName = "info"),
+  menuItem("Data", tabName = "data",icon = icon("database")),
+  menuItem("Info", tabName = "info",icon = icon("info")),
   menuItem("", icon = icon("twitter-square"),
            href = "https://twitter.com/pssGuy"),
   menuItem("", icon = icon("envelope"),
@@ -48,10 +48,11 @@ tabItem("data",
           fluidRow(
             column(width=8,offset=2,
           
-          box(
+          box(width=12,
             status = "info", solidHeader = FALSE,
-            includeMarkdown("data.md"),
-            hr(),
+            includeMarkdown("data.md")
+          ),
+          box(width=12,
             DT::dataTableOutput("data")
           )
             ))

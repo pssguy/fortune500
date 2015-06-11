@@ -16,7 +16,7 @@ dashboardPage(
            href = "https://github.com/pssguy/fortune500"),
   
   menuItem("Other Dashboards",
-          # menuSubItem("WikiGuardian",href = "https://mytinyshinys.shinyapps.io/fortune500"),
+          # menuSubItem("Fortune 500",href = "https://mytinyshinys.shinyapps.io/fortune500"),
            menuSubItem("WikiGuardian",href = "https://mytinyshinys.shinyapps.io/wikiGuardian"),
            menuSubItem("World Soccer",href = "https://mytinyshinys.shinyapps.io/worldSoccer")
            

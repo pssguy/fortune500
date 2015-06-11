@@ -11,8 +11,13 @@ dashboardPage(
  
   menuItem("Data", tabName = "data",icon = icon("database")),
   menuItem("Info", tabName = "info",icon = icon("info")),
+  
+  menuItem("Code",icon = icon("code-fork"),
+           href = "https://github.com/pssguy/fortune500"),
+  
   menuItem("", icon = icon("twitter-square"),
            href = "https://twitter.com/pssGuy"),
+  
   menuItem("", icon = icon("envelope"),
            href = "mailto:agcur@rogers.com")
     )
@@ -60,11 +65,11 @@ tabItem("data",
 
 tabItem("info",includeMarkdown("info.md"))
 
-) #tabitems
+) 
        
         
-)# body
-) #page
+)
+)
 
 
 

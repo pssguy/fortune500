@@ -1,6 +1,7 @@
 
 shinyServer(function(input, output,session) {
   
+  # create industry select based on company range
   
   output$industries <- renderUI({
     fortune %>% 
@@ -11,9 +12,9 @@ shinyServer(function(input, output,session) {
       ungroup() %>% 
       arrange(desc(count)) -> topIndustries
     
-    print(topIndustries)
+   
     topIndustries$industry <- as.character(topIndustries$industry)
-    print(str(topIndustries))
+   
     
     industryChoice <- c("All",topIndustries$industry)
     
@@ -25,8 +26,7 @@ shinyServer(function(input, output,session) {
   # create data used by all
   
   theData <- reactive({
-    print(input$count)
-    
+  
     
     # create a ranking
     
@@ -46,25 +46,15 @@ shinyServer(function(input, output,session) {
     ## create a value useful for circlMarker size
     df <- df %>% 
       mutate(marker=ceiling(sqrt(revRank)/3))
-    
-    
-    
-    # do summary by state info
-    
-    ## then create summary by state
-#     summary<-fortune %>% 
-#       filter(rank>=input$count[1]&rank<=input$count[2]) %>% 
-#       group_by(state) %>% 
-#       summarize(total=n()) #45 prob should do a joine with a states field
-    
-    
+
+    # create by state info
     summary<-df %>% 
       
       group_by(state) %>% 
       summarize(total=n())
     
     
-    ## neeed to create vaue for all states asn set NA to zero
+    ## neeed to create value for all states and set NA to zero
     summary <- allStates %>% 
       left_join(summary)
     
@@ -81,7 +71,7 @@ shinyServer(function(input, output,session) {
     return(info)
   })
   
-  
+  # links to outputs
   source("code/locations.R", local=TRUE)
   source("code/statebins.R", local=TRUE)
   source("code/choropleth.R", local=TRUE)

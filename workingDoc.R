@@ -230,3 +230,55 @@ leaflet(data = states2) %>%
               popup = states2$popUp) %>% 
    mapOptions(zoomToLimits="first")
 
+## check hex
+
+library(rcstatebin)
+statebin(data = taxdata,
+         x = "state",
+         y = "share",
+#          facet = "description",
+#          heading =  "<b>Where do your state's taxes come from?</b>",
+#          footer = "<small>Source: Census <a href='http://www2.census.gov/govs/statetax/14staxcd.txt'>(Data)</a>",
+#          colors = RColorBrewer::brewer.pal(5, 'PuRd'),
+#          control = 'dropdown',
+         type='hex'
+)
+
+ui <- statebinOutput("statebins")
+server <- shinyServer(function(input, output,session) {
+  
+})
+
+library(shiny)
+library(rcstatebin)
+library(htmlwidgets)
+
+app <- shinyApp(
+    ui = bootstrapPage(,
+      radioButtons("style","",choices=c("square","hex"),inline=TRUE),                  
+      statebinOutput("map")
+  ),
+  
+  server = function(input, output) {
+    
+ output$map <-   renderStatebin({
+   print(input$style)
+   
+   if(input$style=="hex") {
+      statebin(data = taxdata,
+                             x = "state",
+                             y = "share",
+                             type='hex'
+    )
+   } else {
+     if(input$style=="hex") {
+       statebin(data = taxdata,
+                x = "state",
+                y = "share"
+       )
+     }
+   }
+ }
+)
+  })
+runApp(app)

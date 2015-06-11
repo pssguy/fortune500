@@ -46,9 +46,15 @@ output$table <- DT::renderDataTable({
   if (is.null(input$choropleth_shape_click$id)) return()
   stateID <-input$choropleth_shape_click$id
   
-  fortune %>% 
+  theData()$df %>% 
     mutate(rank=row_number()) %>% 
     filter(state==stateID) %>% 
     select(rank,company,city,industry) %>% 
     DT::datatable(rownames=FALSE)
+  
+#   fortune %>% 
+#     mutate(rank=row_number()) %>% 
+#     filter(state==stateID) %>% 
+#     select(rank,company,city,industry) %>% 
+#     DT::datatable(rownames=FALSE)
 })

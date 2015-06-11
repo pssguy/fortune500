@@ -15,6 +15,13 @@ dashboardPage(
   menuItem("Code",icon = icon("code-fork"),
            href = "https://github.com/pssguy/fortune500"),
   
+  menuItem("Other Dashboards",
+          # menuSubItem("WikiGuardian",href = "https://mytinyshinys.shinyapps.io/fortune500"),
+           menuSubItem("WikiGuardian",href = "https://mytinyshinys.shinyapps.io/wikiGuardian"),
+           menuSubItem("World Soccer",href = "https://mytinyshinys.shinyapps.io/worldSoccer")
+           
+  ),
+  
   menuItem("", icon = icon("twitter-square"),
            href = "https://twitter.com/pssGuy"),
   
